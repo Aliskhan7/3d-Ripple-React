@@ -3,7 +3,7 @@ import AnimationCanvas from "./components/animate-canvas.jsx";
 
 function App() {
   return (
-    <div>
+    <div className="anim">
       <Suspense fallback={<div>Loading...</div>}>
         <AnimationCanvas />
       </Suspense>
