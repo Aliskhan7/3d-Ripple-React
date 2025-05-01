@@ -1,6 +1,7 @@
 import { Canvas } from "react-three-fiber";
 import { Suspense } from "react";
 import Points from "./points.jsx";
+import CameraControls from "./camera-controls.jsx";
 
 function AnimationCanvas() {
   return (
@@ -11,6 +12,7 @@ function AnimationCanvas() {
       <Suspense fallback={null}>
         <Points />
       </Suspense>
+      <CameraControls />
     </Canvas>
   );
 }
