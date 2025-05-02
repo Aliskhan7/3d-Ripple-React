@@ -1,4 +1,4 @@
-import { Canvas } from "react-three-fiber";
+import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import Points from "./points.jsx";
 import CameraControls from "./camera-controls.jsx";

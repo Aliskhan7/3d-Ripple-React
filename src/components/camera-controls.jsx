@@ -1,4 +1,5 @@
-import { useFrame, useThree } from "react-three-fiber";
+import { useFrame, useThree } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 import { useRef } from "react";
 
 function CameraControls() {
@@ -11,7 +12,7 @@ function CameraControls() {
   useFrame(() => controlsRef.current.update());
 
   return (
-    <orbitControls
+    <OrbitControls
       ref={controlsRef}
       args={[camera, domElement]}
       autoRotate
