@@ -1,41 +1,41 @@
-import { useFrame, useLoader } from "react-three-fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import * as THREE from "three";
 import circleImg from "../assets/circle.png";
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 function Points() {
   const imgTex = useLoader(THREE.TextureLoader, circleImg);
   const bufferRef = useRef();
+  const [t, setT] = useState(0);
 
-  let t = 0;
-  let f = 0.002;
-  let a = 3;
+  const f = 0.002;
+  const a = 3;
   const graph = useCallback(
-    (x, z) => {
-      return Math.sin(f * (x ** 2 + z ** 2 + t)) * a;
+    (x, z, time) => {
+      return Math.sin(f * (x ** 2 + z ** 2 + time)) * a;
     },
-    [t, f, a],
+    [f, a]
   );
 
   const count = 100;
   const sep = 3;
-  let positions = useMemo(() => {
+  const positions = useMemo(() => {
     let positions = [];
 
     for (let xi = 0; xi < count; xi++) {
       for (let zi = 0; zi < count; zi++) {
         let x = sep * (xi - count / 2);
         let z = sep * (zi - count / 2);
-        let y = graph(x, z);
+        let y = graph(x, z, t);
         positions.push(x, y, z);
       }
     }
 
     return new Float32Array(positions);
-  }, [count, sep, graph]);
+  }, [count, sep, graph, t]);
 
   useFrame(() => {
-    t += 15;
+    setT(prev => prev + 15);
 
     const positions = bufferRef.current.array;
 
@@ -45,7 +45,7 @@ function Points() {
         let x = sep * (xi - count / 2);
         let z = sep * (zi - count / 2);
 
-        positions[i + 1] = graph(x, z);
+        positions[i + 1] = graph(x, z, t);
         i += 3;
       }
     }
@@ -55,16 +55,15 @@ function Points() {
 
   return (
     <points>
-      <bufferGeometry attach="geometry">
+      <bufferGeometry>
         <bufferAttribute
           ref={bufferRef}
-          attachObject={["attributes", "position"]}
+          attach="attributes-position"
           array={positions}
           count={positions.length / 3}
           itemSize={3}
         />
       </bufferGeometry>
-
       <pointsMaterial
         attach="material"
         map={imgTex}
